@@ -137,6 +137,8 @@
 
             <button class="btn-login" id="login-btn" onclick="handleLogin()">Log In</button>
 
+            <div id="login-result" style="display:none;"></div>
+
             <p class="note">CSCE 477 &mdash; Secure Login Form Demo</p>
         </div>
 
@@ -161,7 +163,7 @@
                 if (!password || password.trim() == ''){
                     return 'Password is required.';
                 }
-                if (password.length() < 8){
+                if (password.length < 8){
                     return 'Password must be at least 8 characters long.';
                 }
                 return null;
@@ -169,7 +171,7 @@
 
             function showError(fieldId, message){
                 const input = document.getElementById(fieldId);
-                const errorDiv = document.getElementById(fieldID + '-error');
+                const errorDiv = document.getElementById(fieldId + '-error');
                 input.classList.add('error');
                 errorDiv.textContent = message;
                 errorDiv.classList.add('visible');
@@ -183,12 +185,63 @@
                 errorDiv.classList.remove('visible');
             }
 
-            function showResult(message, isSuccess){
-                const resultDiv = document.getElementById('login-result');
-                resultDiv.textContent = message;
-                resultDiv.className = isSuccess ? 'success' : 'failure';
+            // server side simulation
+            function simulateServerLogin(email, password){
+                var users = {
+                    'admin@juice-sh.op': 'SecureP@ass1',
+                    'user@juice-sh.op': 'UserPass88'
+                };
+
+                var normalizedEmail = email.toLowerCase().trim();
+
+                if (users.hasOwnProperty(normalizedEmail) &&
+                    users[normalizedEmail] === password) {
+                        return { success: true, user: normalizedEmail };
+                    }
+                    return { success: false};
             }
 
+            // login handler
+            function handleLogin() {
+                var email = document.getElementById('email').value;
+                var password = document.getElementById('password').value;
+                var resultDiv = document.getElementById('login-result');
+    
+                // clear previous state
+                clearError('email');
+                clearError('password');
+                resultDiv.style.display = 'none';
+    
+                // client-side validation
+                var emailErr = validateEmail(email);
+                var passErr  = validatePassword(password);
+    
+                var hasErrors = false;
+                if (emailErr) { showError('email', emailErr); hasErrors = true; }
+                if (passErr)  { showError('password', passErr); hasErrors = true; }
+                if (hasErrors) return;
+    
+                // simulate server authentication
+                var result = simulateServerLogin(email, password);
+    
+                if (result.success) {
+                    resultDiv.style.display = 'block';
+                    resultDiv.style.background = '#d4edda';
+                    resultDiv.style.color = '#155724';
+                    resultDiv.style.border = '1px solid #c3e6cb';
+                    resultDiv.innerHTML = 'Login successful! Welcome, <strong>' + email + '</strong>';
+                } else {
+                    resultDiv.style.display = 'block';
+                    resultDiv.style.background = '#f8d7da';
+                    resultDiv.style.color = '#721c24';
+                    resultDiv.style.border = '1px solid #f5c6cb';
+                    // user input is reflected into the DOM via innerHTML.
+                    // this enables XSS if an attacker can get a payload past
+                    // the client-side validation (see part 3).
+                    resultDiv.innerHTML = 'Invalid credentials for <strong>' + email + '</strong>. Please try again.';
+                }
+            }
+ 
         </script>
     </body>
 </html>
