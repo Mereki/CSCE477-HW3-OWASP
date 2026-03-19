@@ -56,6 +56,39 @@
                 }
                 return null;
             }
+
+            function validatePassword(password){
+                if (!password || password.trim() == ''){
+                    return 'Password is required.';
+                }
+                if (password.length() < 8){
+                    return 'Password must be at least 8 characters long.';
+                }
+                return null;
+            }
+
+            function showError(fieldId, message){
+                const input = document.getElementById(fieldId);
+                const errorDiv = document.getElementById(fieldID + '-error');
+                input.classList.add('error');
+                errorDiv.textContent = message;
+                errorDiv.classList.add('visible');
+            }
+
+            function clearError(fieldId){
+                const input = document.getElementById(fieldId);
+                const errorDiv = document.getElementById(fieldId + '-error');
+                input.classList.remove('error');
+                errorDiv.textContent = '';
+                errorDiv.classList.remove('visible');
+            }
+
+            function showResult(message, isSuccess){
+                const resultDiv = document.getElementById('login-result');
+                resultDiv.textContent = message;
+                resultDiv.className = isSuccess ? 'success' : 'failure';
+            }
+            
         </script>
     </body>
 </html>
