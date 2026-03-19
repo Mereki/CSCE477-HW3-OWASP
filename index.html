@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>OWASP Juice Shop login</title>
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box;}
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="login-container">
+            <div class="logo">
+                <h1>OWASP Juice Shop</h1>
+                <p>Please log in to continue</p>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+                <div class="error-msg" id="email-error"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+                <div class="error-msg" id="password-error"></div>
+            </div>
+
+            <button class="btn-login" id="login-btn" onclick="handleLogin()">Log In</button>
+
+            <p class="note">CSCE 477 &mdash; Secure Login Form Demo</p>
+        </div>
+
+        <script>
+            // client-side validation scripts
+            function validateEmail(email){
+                if (!email || email.trim() == ''){
+                    return 'Email is required.';
+                }
+                if (!email.includes('@')){
+                    return 'Email must include an "@" symbol.';
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    return 'Please enter a valid email address.';
+                }
+                return null;
+            }
+        </script>
+    </body>
+</html>
