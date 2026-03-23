@@ -1,6 +1,6 @@
 # OWASP Juice Shop — Secure Login Form
 
-**Course:** CSCE 477 — Risk Analysis
+**Course:** CSCE 477 — Risk Analysis  
 **Author:** Caleb Mandapat  
 
 ## Overview
